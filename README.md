@@ -30,6 +30,11 @@ The bot calls the Telegram Bot API directly with `reqwest` and `serde` rather th
 
 ## Installation
 
+Prebuilt images are available on [Docker Hub](https://hub.docker.com/r/mkevac/markotranscribebot)
+for `linux/amd64` and `linux/arm64`. The first release is
+`mkevac/markotranscribebot:0.1.0`; `latest` tracks the newest published release.
+The Compose file uses `latest`; change its bot image tag to pin a specific version.
+
 1. Create a bot with [BotFather](https://t.me/BotFather) and keep the token.
 2. In BotFather's Mini App → your bot → Bot Settings:
    - turn on **Guest Mode** (for `@YourBot` replies in any chat);
@@ -37,7 +42,7 @@ The bot calls the Telegram Bot API directly with `reqwest` and `serde` rather th
 3. Get an API ID and hash from https://my.telegram.org/apps (needed for the local Bot API server).
 4. Copy `.env.example` to `.env` and fill it in. At minimum: `TELEGRAM_BOT_API_TOKEN`, `ADMIN_CHAT_ID`, `STT_API_KEY`.
 5. Log the bot out of the cloud Bot API once: `just logout-cloud`. Telegram requires this before a bot runs on a local server, and the bot can't log back in to the cloud server for 10 minutes.
-6. Start it: `docker compose up -d`.
+6. Pull the images with `docker compose pull`, then start with `docker compose up -d --no-build`.
 7. Send `/start` to your bot.
 
 Your Telegram user ID is the same as your private chat ID with the bot. If you don't know it, message the bot from that account: it replies with your ID and reports it to the admin.

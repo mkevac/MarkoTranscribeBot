@@ -5,11 +5,11 @@ WORKDIR /app
 # Cache dependencies separately from the source.
 COPY Cargo.toml Cargo.lock ./
 RUN mkdir src && echo 'fn main() {}' > src/main.rs \
- && cargo build --release \
+ && cargo build --release --locked \
  && rm -rf src
 
 COPY src ./src
-RUN touch src/main.rs && cargo build --release
+RUN touch src/main.rs && cargo build --release --locked
 
 # Stage 2: runtime with ffmpeg/ffprobe
 FROM debian:bookworm-slim
