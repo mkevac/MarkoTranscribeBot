@@ -1,3 +1,6 @@
-/target
+/target/
 .env
-data/
+.env.*
+!.env.example
+/data/
+.DS_Store
