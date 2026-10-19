@@ -47,6 +47,18 @@ The Compose file uses `latest`; change its bot image tag to pin a specific versi
 
 Your Telegram user ID is the same as your private chat ID with the bot. If you don't know it, message the bot from that account: it replies with your ID and reports it to the admin.
 
+### Server deployment
+
+Use `deploy/docker-compose.yml` as `/opt/MarkoTranscribeBot/docker-compose.yml`
+and place `.env` beside it. This configuration uses the published `0.1.0` image,
+keeps the Bot API server on the internal Docker network, and restarts both services
+automatically. Set `TRANSCRIBE_IMAGE_TAG` in `.env` to select a later release.
+
+Install `deploy/MarkoTranscribeBot.service` in `/etc/systemd/system/`, pull the
+images from `/opt/MarkoTranscribeBot`, then run
+`systemctl daemon-reload` and `systemctl enable --now MarkoTranscribeBot`.
+Use `systemctl stop MarkoTranscribeBot` to stop the stack.
+
 ### Without the local Bot API server
 
 Leave `BOT_API_URL` unset and run only the bot container (or `just run-local`). Everything works, except that Telegram's cloud API only lets bots download files up to 20 MB. That covers circles and voice messages, but not large audio files.
