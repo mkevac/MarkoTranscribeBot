@@ -1,5 +1,7 @@
 # Marko Transcribe Bot
 
+<img src="assets/capybara-avatar.png" alt="Capybara with headphones, microphone, and a voice-to-text speech bubble" width="240">
+
 A Telegram bot that turns voice messages, video circles and audio/video files into text, using your own speech-to-text provider and API key: OpenAI, Groq, ElevenLabs, or a self-hosted Whisper server.
 
 Telegram's built-in transcription can't be configured. With this bot you pick the model, the language and a prompt with names and jargon, so the text comes out the way you want.
@@ -31,8 +33,8 @@ The bot calls the Telegram Bot API directly with `reqwest` and `serde` rather th
 ## Installation
 
 Prebuilt images are available on [Docker Hub](https://hub.docker.com/r/mkevac/markotranscribebot)
-for `linux/amd64` and `linux/arm64`. The first release is
-`mkevac/markotranscribebot:0.1.0`; `latest` tracks the newest published release.
+for `linux/amd64` and `linux/arm64`. The current release is
+`mkevac/markotranscribebot:0.1.1`; `latest` tracks the newest published release.
 The Compose file uses `latest`; change its bot image tag to pin a specific version.
 
 1. Create a bot with [BotFather](https://t.me/BotFather) and keep the token.
@@ -50,7 +52,7 @@ Your Telegram user ID is the same as your private chat ID with the bot. If you d
 ### Server deployment
 
 Use `deploy/docker-compose.yml` as `/opt/MarkoTranscribeBot/docker-compose.yml`
-and place `.env` beside it. This configuration uses the published `0.1.0` image,
+and place `.env` beside it. This configuration uses the published `0.1.1` image,
 keeps the Bot API server on the internal Docker network, and restarts both services
 automatically. Set `TRANSCRIBE_IMAGE_TAG` in `.env` to select a later release.
 
@@ -83,7 +85,9 @@ Leave `BOT_API_URL` unset and run only the bot container (or `just run-local`). 
 
 ## Access control
 
-Transcription costs money, so the bot is private by default. Allowed users are the admin (`ADMIN_CHAT_ID`), the IDs in `ALLOWED_USER_IDS`, or everyone if `ALLOW_EVERYONE=true`. Anyone else is turned away, and the admin is told who tried. Only the person who sent a file can press its Cancel button.
+Public transcription is enabled for now with `ALLOW_EVERYONE=true` in the example configuration and the deployed bot. Anyone can use private chat, guest, and Business transcription. `/stats` and `/users` remain restricted to the admin (`ADMIN_CHAT_ID`), and only a job's owner can cancel it.
+
+To make the bot private again, set `ALLOW_EVERYONE=false` and recreate the bot container. Then only the admin and the IDs in `ALLOWED_USER_IDS` can transcribe. The binary also uses this restricted mode when `ALLOW_EVERYONE` is unset.
 
 ## Configuration
 
@@ -93,7 +97,7 @@ Transcription costs money, so the bot is private by default. Allowed users are t
 | `BOT_API_URL` | `https://api.telegram.org` | Set by docker-compose to the local server |
 | `ADMIN_CHAT_ID` | none | Admin user ID |
 | `ALLOWED_USER_IDS` | empty | Comma-separated user IDs |
-| `ALLOW_EVERYONE` | `false` | Open the bot to everyone |
+| `ALLOW_EVERYONE` | `false`; example sets `true` | Open transcription to everyone; admin commands stay restricted |
 | `STT_PROVIDER` | `openai` | `openai` (any compatible API) or `elevenlabs` |
 | `STT_BASE_URL` | per provider | API base URL |
 | `STT_API_KEY` | none | Provider key (optional for keyless local servers) |

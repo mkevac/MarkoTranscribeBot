@@ -11,7 +11,7 @@ services:
     restart: unless-stopped
 
   markotranscribebot:
-    image: mkevac/markotranscribebot:${TRANSCRIBE_IMAGE_TAG:-0.1.0}
+    image: mkevac/markotranscribebot:${TRANSCRIBE_IMAGE_TAG:-0.1.1}
     depends_on:
       - telegram-bot-api
     env_file: .env
