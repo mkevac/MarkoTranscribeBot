@@ -1,0 +1,36 @@
+services:
+  speaches:
+    image: ghcr.io/speaches-ai/speaches:latest-cpu@sha256:21e3df06d842fb7802ab470dd77c25f0e8c0d22950e8d8c6ae886e851af53ef8
+    environment:
+      API_KEY: "${API_KEY:?Set a separate local transcription API key in .env}"
+      ENABLE_UI: "false"
+      LOG_LEVEL: info
+      WHISPER__INFERENCE_DEVICE: cpu
+      WHISPER__COMPUTE_TYPE: int8
+      WHISPER__CPU_THREADS: "4"
+      WHISPER__NUM_WORKERS: "1"
+      WHISPER__TTL: "-1"
+      WHISPER__USE_BATCHED_MODE: "true"
+    ports:
+      - "${STT_BIND_IP:?Set the server LAN address in .env}:8000:8000"
+    volumes:
+      - hf-hub-cache:/home/ubuntu/.cache/huggingface/hub
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import os,urllib.request; urllib.request.urlopen(urllib.request.Request('http://127.0.0.1:8000/health',headers={'Authorization':'Bearer '+os.environ['API_KEY']}),timeout=8).read()"
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10m
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+volumes:
+  hf-hub-cache:

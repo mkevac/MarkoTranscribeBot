@@ -61,6 +61,10 @@ images from `/opt/MarkoTranscribeBot`, then run
 `systemctl daemon-reload` and `systemctl enable --now MarkoTranscribeBot`.
 Use `systemctl stop MarkoTranscribeBot` to stop the stack.
 
+For a separate CPU transcription server, see the
+[local Whisper deployment guide](deploy/local-stt/README.md). It includes a
+digest-pinned Speaches stack, persistent model storage, and bot configuration.
+
 ### Without the local Bot API server
 
 Leave `BOT_API_URL` unset and run only the bot container (or `just run-local`). Everything works, except that Telegram's cloud API only lets bots download files up to 20 MB. That covers circles and voice messages, but not large audio files.
