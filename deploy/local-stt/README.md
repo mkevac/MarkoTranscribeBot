@@ -77,6 +77,22 @@ Telegram transfer. Successful decoding and nonempty output establish compatibili
 they do not establish transcription accuracy. Synthetic Russian and Serbian tests
 had errors, and automatic detection selected Slovak for the synthetic Serbian voice.
 
+An approved comparison sent the same three Russian recordings to OpenAI
+`gpt-transcribe`. Both services received identical converted audio, automatic
+language detection, and no prompt:
+
+| Audio duration | Local Whisper | OpenAI |
+| --- | --- | --- |
+| 4.2 s | 10.7 s | 1.7 s |
+| 58.5 s | 17.2 s | 2.3 s |
+| 59.7 s | 23.4 s | 2.8 s |
+
+OpenAI was approximately 6–8 times faster in this small test. The transcripts
+differed by 23 word edits across 196 cloud-reference words (11.7%), after ignoring
+case, punctuation, and Russian `ё`/`е` spelling variants. Some differences changed
+phrases and negation. This measures disagreement, not accuracy: neither transcript
+was human-verified, and these recordings do not test English or Serbian quality.
+
 The installed model revision was
 `4df90f75321148c3a29a9e2351b7ddf8f5b115a8`. The image contains faster-whisper
 1.1.1 and CTranslate2 4.5.0.
